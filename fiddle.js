@@ -14,9 +14,8 @@ for (const i of options) {
 
 console.log(casemiro);
 
-const x = par => {
-	if par == 10 return
-	return par + x(par)
-}
+const x = (par) => {
+  if (par == 10) return par + x(par);
+};
 
-console.log(x(10))
+console.log(x(10));
