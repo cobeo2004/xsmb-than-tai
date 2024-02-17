@@ -1,2 +1,5 @@
 selenium
 pandas
+undetected_chromedriver
+matplotlib
+seaborn

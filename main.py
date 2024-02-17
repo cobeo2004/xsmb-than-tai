@@ -10,10 +10,10 @@ from datetime import date, timedelta
 import argparse
 from random import randint
 
-dictionaries = open("helper.help", "r+")
+DICTIONARIES = open("helper.help", "r+")
 ap = argparse.ArgumentParser()
-URL = 'https://www.thantai.net/so-ket-qua'
-exec_path = '/usr/local/bin/chromedriver'
+URL = 'https://www.thantai1.net/so-ket-qua'
+EXEC_PATH = '/usr/local/bin/chromedriver'
 current_date = date.today()
 data = []
 VALUES = []
@@ -57,7 +57,7 @@ ACCEPT_PROVINCE = [
 ]
 index: int = 0
 ap.add_argument("-p", "--province", type=str,
-                required=True, help=f"Choose the province, value is: {dictionaries.readlines()}")
+                required=True, help=f"Choose the province, value is: {DICTIONARIES.readlines()}")
 # ap.add_argument("-nv", "--numval", required=True, type=int,
 #                 help="Number of reading values, recommend should be around 3600-4000 values")
 args = ap.parse_args()
@@ -69,22 +69,9 @@ if __name__ == "__main__":
         quit()
     else:
         system('clear')
-        print("[INFO]: IS INITIALIZING\n")
-        print("[INIT]: 0%\n")
-        sleep(1.2)
-        print("[INIT]: 20% ==>\n")
-        sleep(1.2)
-        print("[INIT]: 40% ====>\n")
-        sleep(1.2)
-        print("[INIT]: 60% ======>\n")
-        sleep(1.2)
-        print("[INIT]: 80% ========>\n")
-        sleep(1.2)
-        print("[INIT]: 100% ==============>\n")
-        sleep(1.2)
         print("[INFO]: INIT FINISHED, START THE READ!\n")
         browser = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()))
+            service=Service(EXEC_PATH))
         browser.get(URL)
         province = Select(browser.find_element(By.ID, "province"))
         province.select_by_value(args.province)
@@ -99,7 +86,7 @@ if __name__ == "__main__":
                 f"{current_date.day}-{current_date.month}-{current_date.year}")
 
             button = browser.find_element(
-                By.XPATH, "/html/body/div[2]/main/div/form/div[2]/div/button[9]")
+                By.XPATH, "/html/body/div[3]/main/div/form/div[2]/div/button[9]")
             button.click()
 
             results = browser.find_elements(
@@ -119,8 +106,9 @@ if __name__ == "__main__":
                 break
 
     data_frame = p.DataFrame(data, columns=["Results"])
+    data_fName = f"./CSVs/KQXS_{str(args.province).upper()}_tu_{current_date.day}-{current_date.month}-{current_date.year}.csv"
     data_frame.to_csv(
-        f"./CSVs/XS_{str(args.province).upper()}_Do_Tai.csv", index=False)
+        data_fName, index=False)
     print(
-        f"[INFO]: FINISHED THE COLLECTING PROCESS, the file is: XS_{str(args.province).upper()}_Do_Tai.csv!\n")
+        f"[INFO]: FINISHED THE COLLECTING PROCESS, the file is: {data_fName}\n")
     browser.close()
